@@ -75,16 +75,69 @@ class LinkedBST:
         print()
 
     def min_key(self):
-        pass
+        if self.root is None:
+            return None
+
+        trav = self.root
+        while trav.left is not None:
+            trav = trav.left
+        return trav.key
 
     def delete_max_key(self):
-        pass
+        trav = self.root
+        if self.root is None:
+            return None
+
+        if self.root.right is None:
+            key = self.root.key
+            self.root = self.root.left
+            return key
+
+        while trav.right is not None:
+            trav = trav.right
+
+        if trav.parent.right == trav:
+            trav.parent.right = trav.left
+        else:
+            trav.parent.left = trav.left
+
+        return trav.key
 
     def depth(self, key):
-        pass
+        if self.root is None:
+            return -1
+
+        trav = self.root
+        d = 0
+        while trav is not None:
+            if trav.key == key:
+                return d
+            elif key < trav.key:
+                trav = trav.left
+            else:
+                trav = trav.right
+            d += 1
+
+        return -1
 
     def __range_search(self, root, key_min, key_max):
-        pass
+        if root is None:
+            return []
+
+        items = []
+
+        self.nodes_visited += 1
+
+        if root.key > key_min:
+            items += self.__range_search(root.left, key_min, key_max)
+
+        if root.key >= key_min and root.key <= key_max:
+            items.append(root.key)
+
+        if root.key < key_max:
+            items += self.__range_search(root.right, key_min, key_max)
+
+        return items
 
     def range_search(self, key_min, key_max):
         self.nodes_visited = 0
